@@ -38,9 +38,11 @@ class DashboardScreen extends StatelessWidget {
                           crossAxisCount: size.width < 650 ? 2 : 4,
                           childAspectRatio:
                               size.width < 650 && size.width > 350 ? 1.1 : 0.8,
+                          isInMain: true,
                         ),
                         desktop: ProductGridWidget(
                           childAspectRatio: size.width < 1400 ? 0.8 : 1.05,
+                          isInMain: true,
                         ),
                       ),
                       // MyProductsHome(),
