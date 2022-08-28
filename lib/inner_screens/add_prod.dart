@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grocery_admin_panel/controllers/MenuController.dart';
@@ -23,7 +24,8 @@ class UploadProductFormState extends State<UploadProductForm> {
   final _formKey = GlobalKey<FormState>();
   String _catValue = 'Vegetables';
   late final TextEditingController _titleController, _priceController;
-
+  int _groupValue = 1;
+  bool isPiece = false;
   @override
   void initState() {
     _priceController = TextEditingController();
@@ -184,16 +186,62 @@ class UploadProductFormState extends State<UploadProductForm> {
                                         height: 10,
                                       ),
                                       // Radio button code here
+                                      Row(
+                                        children: [
+                                          TextWidget(
+                                            text: 'KG',
+                                            color: color,
+                                          ),
+                                          Radio(
+                                            value: 1,
+                                            groupValue: _groupValue,
+                                            onChanged: (valuee) {
+                                              setState(() {
+                                                _groupValue = 1;
+                                                isPiece = false;
+                                              });
+                                            },
+                                            activeColor: Colors.green,
+                                          ),
+                                          TextWidget(
+                                            text: 'Piece',
+                                            color: color,
+                                          ),
+                                          Radio(
+                                            value: 2,
+                                            groupValue: _groupValue,
+                                            onChanged: (valuee) {
+                                              setState(() {
+                                                _groupValue = 2;
+                                                isPiece = true;
+                                              });
+                                            },
+                                            activeColor: Colors.green,
+                                          ),
+                                        ],
+                                      )
                                     ],
                                   ),
                                 ),
                               ),
                               // Image to be picked code is here
                               Expanded(
-                                  flex: 4,
+                                flex: 4,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    color: Colors.red,
-                                  )),
+                                    height: size.width > 650
+                                        ? 350
+                                        : size.width * 0.45,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    child: dottedBorder(color: color),
+                                  ),
+                                ),
+                              ),
                               Expanded(
                                   flex: 1,
                                   child: FittedBox(
@@ -250,6 +298,41 @@ class UploadProductFormState extends State<UploadProductForm> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget dottedBorder({
+    required Color color,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: DottedBorder(
+          dashPattern: const [6.7],
+          borderType: BorderType.RRect,
+          color: color,
+          radius: const Radius.circular(12),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.image_outlined,
+                  color: color,
+                  size: 50,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextButton(
+                    onPressed: (() {}),
+                    child: TextWidget(
+                      text: 'Choose an image',
+                      color: Colors.blue,
+                    ))
+              ],
+            ),
+          )),
     );
   }
 
