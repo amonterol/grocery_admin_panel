@@ -45,9 +45,10 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                         fct: () {
                           context.read<MenuController>().controlAllOrder();
                         },
+                        title: 'All Orders',
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 25,
                       ),
                       const Padding(
                         padding: EdgeInsets.all(8.0),

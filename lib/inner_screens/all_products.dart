@@ -44,6 +44,10 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
                         fct: () {
                           context.read<MenuController>().controlProductsMenu();
                         },
+                        title: 'All Products',
+                      ),
+                      const SizedBox(
+                        height: 25,
                       ),
                       Responsive(
                         mobile: ProductGridWidget(
