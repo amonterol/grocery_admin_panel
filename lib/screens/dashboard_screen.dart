@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:grocery_admin_panel/consts/constants.dart';
 import 'package:grocery_admin_panel/inner_screens/add_prod.dart';
 import 'package:grocery_admin_panel/responsive.dart';
-import 'package:grocery_admin_panel/services/global_method.dart';
 import 'package:grocery_admin_panel/services/utils.dart';
 import 'package:grocery_admin_panel/widgets/buttons.dart';
 import 'package:grocery_admin_panel/widgets/grid_products.dart';
@@ -54,9 +53,11 @@ class DashboardScreen extends StatelessWidget {
                   const Spacer(),
                   ButtonsWidget(
                       onPressed: () {
-                        GlobalMethods.navigateTo(
-                            ctx: context,
-                            routeName: UploadProductForm.routeName);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const UploadProductForm()));
                       },
                       text: 'Add product',
                       icon: Icons.add,

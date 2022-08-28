@@ -21,7 +21,7 @@ class UploadProductForm extends StatefulWidget {
 
 class UploadProductFormState extends State<UploadProductForm> {
   final _formKey = GlobalKey<FormState>();
-
+  String _catValue = 'Vegetables';
   late final TextEditingController _titleController, _priceController;
 
   @override
@@ -165,12 +165,13 @@ class UploadProductFormState extends State<UploadProductForm> {
                                       ),
                                       const SizedBox(height: 20),
                                       TextWidget(
-                                        text: 'Porduct category*',
+                                        text: 'Product category*',
                                         color: color,
                                         isTitle: true,
                                       ),
                                       const SizedBox(height: 10),
                                       // Drop down menu code here
+                                      _categoryDropDown(),
                                       const SizedBox(
                                         height: 20,
                                       ),
@@ -248,6 +249,71 @@ class UploadProductFormState extends State<UploadProductForm> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _categoryDropDown() {
+    final color = Utils(context).color;
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+          style: TextStyle(
+            color: color,
+            fontWeight: FontWeight.w600,
+            fontSize: 18,
+          ),
+          value: _catValue,
+          onChanged: (value) {
+            setState(() {
+              _catValue = value!;
+            });
+            // ignore: avoid_print
+            print(_catValue);
+          },
+          hint: const Text('Select a category'),
+          items: const [
+            DropdownMenuItem(
+              value: 'Vegetables',
+              child: Text(
+                'Vegetables',
+              ),
+            ),
+            DropdownMenuItem(
+              value: 'Fruits',
+              child: Text(
+                'Fruits',
+              ),
+            ),
+            DropdownMenuItem(
+              value: 'Grains',
+              child: Text(
+                'Grains',
+              ),
+            ),
+            DropdownMenuItem(
+              value: 'Nuts',
+              child: Text(
+                'Nuts',
+              ),
+            ),
+            DropdownMenuItem(
+              value: 'Herbs',
+              child: Text(
+                'Herbs',
+              ),
+            ),
+            DropdownMenuItem(
+              value: 'Spices',
+              child: Text(
+                'Spices',
+              ),
+            )
+          ],
+        )),
       ),
     );
   }
