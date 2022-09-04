@@ -25,6 +25,7 @@ class TextWidget extends StatelessWidget {
           color: color,
           overflow: TextOverflow.ellipsis,
           fontWeight: isTitle ? FontWeight.w600 : FontWeight.w400),
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

@@ -1,10 +1,12 @@
-/*
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:grocery_admin_panel/Screens/loading_manager.dart';
 import 'package:grocery_admin_panel/controllers/MenuController.dart';
 import 'package:grocery_admin_panel/services/global_method.dart';
@@ -85,6 +87,78 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _priceController.dispose();
     _titleController.dispose();
     super.dispose();
+  }
+
+  void _updateProduct() async {
+    final isValid = _formKey.currentState!.validate();
+    FocusScope.of(context).unfocus();
+
+    if (isValid) {
+      _formKey.currentState!.save();
+
+      try {
+        String imageUri = ''; //Uri? imageUri;
+        setState(() {
+          _isLoading = true;
+        });
+        if (_pickedImage != null) {
+          // Create a Reference to the file
+          Reference ref = FirebaseStorage.instance
+              .ref()
+              .child('productsImages')
+              // ignore: prefer_interpolation_to_compose_strings
+              .child(widget.id + 'jpg');
+
+          //Using a method to upload the appropiate reference
+          UploadTask? uploadTask;
+          if (kIsWeb) {
+            uploadTask = ref.putData(webImage);
+          } else {
+            uploadTask = ref.putFile(_pickedImage!);
+          }
+
+          /// A new string is uploaded to storage.. when finished we get the
+          // firebase storage url
+
+          await uploadTask
+              .whenComplete(() async => imageUri = await ref.getDownloadURL());
+        }
+        await FirebaseFirestore.instance
+            .collection('products')
+            .doc(widget.id)
+            .update({
+          //the product already has an id
+          'title': _titleController.text,
+          'price': _priceController.text,
+          'salePrice': _salePrice,
+          'imageUrl': _pickedImage == null ? widget.imageUrl : imageUri,
+          'productCategoryName': _catValue,
+          'isOnSale': _isOnSale,
+          'isPiece': _isPiece,
+        });
+        await Fluttertoast.showToast(
+          msg: "Product has been updated",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+        );
+      } on FirebaseException catch (error) {
+        GlobalMethods.errorDialog(
+            subtitle: '${error.message}', context: context);
+        setState(() {
+          _isLoading = false;
+        });
+      } catch (error) {
+        GlobalMethods.errorDialog(subtitle: '$error', context: context);
+        setState(() {
+          _isLoading = false;
+        });
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -384,7 +458,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                   ),
                                   ButtonsWidget(
                                     onPressed: () {
-                                      // _uploadForm();
+                                      _updateProduct();
                                     },
                                     text: 'Update',
                                     icon: IconlyBold.setting,
@@ -532,4 +606,3 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 }
-*/

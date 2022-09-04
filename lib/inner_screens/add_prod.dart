@@ -101,7 +101,7 @@ class _UploadProductFormState extends State<UploadProductForm> {
           'id': _uuid,
           'title': _titleController.text,
           'price': _priceController.text,
-          'salePrice': 0.1,
+          'salePrice': 0.0001,
           'imageUrl': imageUri,
           'productCategoryName': _catValue,
           'isOnSale': false,
