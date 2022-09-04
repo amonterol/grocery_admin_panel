@@ -8,17 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:grocery_admin_panel/Screens/loading_manager.dart';
-import 'package:grocery_admin_panel/controllers/MenuController.dart';
+//import 'package:grocery_admin_panel/controllers/MenuController.dart';
 import 'package:grocery_admin_panel/services/global_method.dart';
 import 'package:grocery_admin_panel/services/utils.dart';
 import 'package:grocery_admin_panel/widgets/buttons.dart';
-import 'package:grocery_admin_panel/widgets/header.dart';
+//import 'package:grocery_admin_panel/widgets/header.dart';
 import 'package:grocery_admin_panel/widgets/side_menu.dart';
 import 'package:grocery_admin_panel/widgets/text_widget.dart';
 import 'package:iconly/iconly.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import '../responsive.dart';
+//import 'package:provider/provider.dart';
+//import '../responsive.dart';
 
 class EditProductScreen extends StatefulWidget {
   const EditProductScreen(
@@ -181,14 +181,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
       ),
     );
     return Scaffold(
-      key: context.read<MenuController>().getEditProductscaffoldKey,
+      //key: context.read<MenuController>().getEditProductscaffoldKey,
       drawer: const SideMenu(),
       body: Row(
         children: [
+          /*
           if (Responsive.isDesktop(context))
             const Expanded(
               child: SideMenu(),
             ),
+          */
           Expanded(
             flex: 5,
             child: LoadingManager(
@@ -196,6 +198,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    /*
                     Header(
                       showTexField: false,
                       fct: () {
@@ -205,6 +208,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       },
                       title: 'Edit this product',
                     ),
+                    */
                     Container(
                       width: size.width > 650 ? 650 : size.width,
                       color: Theme.of(context).cardColor,
@@ -448,7 +452,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
                                           title: 'Delete?',
                                           subtitle: 'Press okay to confirm',
                                           fct: () async {
-                                            Navigator.pop(context);
+                                            await FirebaseFirestore.instance
+                                                .collection('products')
+                                                .doc(widget.id)
+                                                .delete();
+                                            await Fluttertoast.showToast(
+                                              msg: "Product has been deleted",
+                                              toastLength: Toast.LENGTH_LONG,
+                                              gravity: ToastGravity.CENTER,
+                                              timeInSecForIosWeb: 1,
+                                            );
+                                            // ignore: use_build_context_synchronously
+                                            while (Navigator.canPop(context)) {
+                                              // ignore: use_build_context_synchronously
+                                              Navigator.pop(context);
+                                            }
                                           },
                                           context: context);
                                     },
