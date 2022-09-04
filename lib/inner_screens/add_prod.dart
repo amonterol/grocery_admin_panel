@@ -1,12 +1,13 @@
 import 'dart:io';
+//import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:grocery_admin_panel/controllers/MenuController.dart';
 import 'package:grocery_admin_panel/screens/loading_manager.dart';
 import 'package:grocery_admin_panel/services/utils.dart';
@@ -49,8 +50,10 @@ class _UploadProductFormState extends State<UploadProductForm> {
 
   @override
   void dispose() {
-    _priceController.dispose();
-    _titleController.dispose();
+    if (mounted) {
+      _priceController.dispose();
+      _titleController.dispose();
+    }
     super.dispose();
   }
 
@@ -58,20 +61,48 @@ class _UploadProductFormState extends State<UploadProductForm> {
   void _uploadForm() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
-    setState(() {
-      _isLoading = true;
-    });
+
     if (isValid) {
       _formKey.currentState!.save();
+      if (_pickedImage == null) {
+        GlobalMethods.errorDialog(
+            subtitle: 'Please pick up an image', context: context);
+        return;
+      }
       // ignore: no_leading_underscores_for_local_identifiers
       final _uuid = const Uuid().v4();
       try {
+        setState(() {
+          _isLoading = true;
+        });
+
+        // Create a Reference to the file
+        Reference ref = FirebaseStorage.instance
+            .ref()
+            .child('productsImages')
+            // ignore: prefer_interpolation_to_compose_strings
+            .child(_uuid + 'jpg');
+
+        //Using a method to upload the appropiate reference
+        UploadTask? uploadTask;
+        if (kIsWeb) {
+          uploadTask = ref.putData(webImage);
+        } else {
+          uploadTask = ref.putFile(_pickedImage!);
+        }
+
+        /// A new string is uploaded to storage.. when finished we get the
+        // firebase storage url
+        String imageUri = '';
+        await uploadTask
+            .whenComplete(() async => imageUri = await ref.getDownloadURL());
+
         await FirebaseFirestore.instance.collection('products').doc(_uuid).set({
           'id': _uuid,
           'title': _titleController.text,
           'price': _priceController.text,
           'salePrice': 0.1,
-          'imageUrl': '',
+          'imageUrl': imageUri,
           'productCategoryName': _catValue,
           'isOnSale': false,
           'isPiece': isPiece,

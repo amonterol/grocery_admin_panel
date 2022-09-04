@@ -11,10 +11,10 @@ import 'providers/dark_theme_provider.dart';
 
 void main() async {
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    //options: DefaultFirebaseOptions.currentPlatform,
     //options: DefaultFirebaseOptions.android, // if you're using windows emulator
     //options: DefaultFirebaseOptions.ios, // if you're using windows emulator
-    //options: DefaultFirebaseOptions.web,
+    options: DefaultFirebaseOptions.web,
   );
   runApp(const MyApp());
 }
