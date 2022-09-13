@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_admin_panel/consts/constants.dart';
+import 'package:grocery_admin_panel/controllers/MenuController.dart';
 import 'package:grocery_admin_panel/inner_screens/add_prod.dart';
 import 'package:grocery_admin_panel/responsive.dart';
 import 'package:grocery_admin_panel/services/utils.dart';
 import 'package:grocery_admin_panel/widgets/buttons.dart';
 import 'package:grocery_admin_panel/widgets/grid_products.dart';
 import 'package:grocery_admin_panel/widgets/header.dart';
+import 'package:grocery_admin_panel/widgets/orders_list.dart';
 import 'package:grocery_admin_panel/widgets/text_widget.dart';
-
 import 'package:provider/provider.dart';
-
-import '../controllers/MenuController.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -88,9 +87,7 @@ class DashboardScreen extends StatelessWidget {
                           isInMain: true,
                         ),
                       ),
-                      // MyProductsHome(),
-                      // SizedBox(height: defaultPadding),
-                      // OrdersScreen(),
+                      const OrdersList(),
                     ],
                   ),
                 ),

@@ -4,8 +4,6 @@ import 'package:provider/provider.dart';
 
 import '../controllers/MenuController.dart';
 import '../responsive.dart';
-//import '../services/utils.dart';
-//import '../widgets/grid_products.dart';
 import '../widgets/header.dart';
 import '../widgets/side_menu.dart';
 
@@ -41,6 +39,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                   controller: ScrollController(),
                   child: Column(
                     children: [
+                      const SizedBox(
+                        height: 25,
+                      ),
                       Header(
                         fct: () {
                           context.read<MenuController>().controlAllOrder();
@@ -48,7 +49,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                         title: 'All Orders',
                       ),
                       const SizedBox(
-                        height: 25,
+                        height: 20,
                       ),
                       const Padding(
                         padding: EdgeInsets.all(8.0),
